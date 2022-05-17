@@ -2,7 +2,9 @@
 
 ## ToDo
 - Fix angle calculation
-- Add ai
+- Add bot
 - Add menu
 - Add scoreboad
-- Add crank
+- Add crank controls
+- Add title screen
+- Add sounds
