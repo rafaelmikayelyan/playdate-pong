@@ -1,4 +1,4 @@
-#Pong for Playdate
+# Pong for Playdate
 
 ## ToDo
 - Fix angle calculation
