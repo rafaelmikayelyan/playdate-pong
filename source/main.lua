@@ -1,97 +1,124 @@
--- Name this file `main.lua`. Your game can use multiple source files if you wish
--- (use the `import "myFilename"` command), but the simplest games can be written
--- with just `main.lua`.
+import 'CoreLibs/graphics'
+-- import 'CoreLibs/crank'
+import 'CoreLibs/object'
+import 'CoreLibs/sprites'
+-- import 'CoreLibs/timer'
 
--- You'll want to import these in just about every project you'll work on.
+import 'paddle'
+import 'player'
+import 'ball'
+import 'score'
 
-import "CoreLibs/object"
-import "CoreLibs/graphics"
-import "CoreLibs/sprites"
-import "CoreLibs/timer"
-import "CoreLibs/crank"
+local PD <const> = playdate
+local GFX <const> = PD.graphics
 
--- Declaring this "gfx" shorthand will make your life easier. Instead of having
--- to preface all graphics calls with "playdate.graphics", just use "gfx."
--- Performance will be slightly enhanced, too.
--- NOTE: Because it's local, you'll have to do it in every .lua source file.
+local player = nil
+local bot = nil
+local ball = nil
+local score = nil
 
-local gfx <const> = playdate.graphics
+local collisions = nil
 
--- Here's our player sprite declaration. We'll scope it to this file because
--- several functions need to access it.
+local screenW <const> = PD.display.getWidth()
+local screenH <const> = PD.display.getHeight()
+local offset <const> = 10
 
-local playerSprite = nil
+local speed = 5
+local moveX = speed
+local moveY = 0
 
--- A function to set up our game environment.
+local turn = 0
 
-function myGameSetUp()
+local trueAngle = false
 
-    -- Set up the player sprite.
-    -- The :setCenter() call specifies that the sprite will be anchored at its center.
-    -- The :moveTo() call moves our sprite to the center of the display.
+local function nextTurn()
+		ball:moveTo(screenW / 2, screenH / 2)
+		if turn % 2 == 1 then
+			moveX = speed
+		else
+			moveX = -speed
+		end
+		moveY = 0
+		turn += 1
+end
 
-    local playerImage = gfx.image.new("Images/smug")
-    assert( playerImage ) -- make sure the image was where we thought
+local function checkBounds()
+	if ball.y >= screenH or ball.y <= (0 + ball.r) then
+		moveY = -moveY
+	elseif ball.x >= screenW or ball.x <= 0 then
+		score:add(ball.x)
+		nextTurn()
+	end
+end
 
-    playerSprite = gfx.sprite.new( playerImage )
-    playerSprite:moveTo( 200, 120 ) -- this is where the center of the sprite is placed; (200,120) is the center of the Playdate screen
-    playerSprite:add() -- This is critical!
+local function ricochet(mode)
+	-- angle calculation
+	if trueAngle then
+		ratio = (ball.y - (paddle.y - paddleR) ) / paddleH
+		angle = 160 * ratio * -moveX / math.abs(moveX)
+		
+		sinB = math.sin(math.rad(angle))
+		cosB = math.cos(math.rad(angle))
+		sinA = math.sin(math.rad(90-angle))
+		moveX = speed * sinB
+		moveY = moveX * sinA
 
-    -- We want an environment displayed behind our sprite.
-    -- There are generally two ways to do this:
-    -- 1) Use setBackgroundDrawingCallback() to draw a background image. (This is what we're doing below.)
-    -- 2) Use a tilemap, assign it to a sprite with sprite:setTilemap(tilemap),
-    --       and call :setZIndex() with some low number so the background stays behind
-    --       your other sprites.
+	-- 2 angle zones
+	else
+		if ball.y - ball.r <= paddle.y and ball.y + ball.r >= paddle.y then
+			print(ball.y)
+			moveX = -moveX
+			moveY = 0
+		else
+			moveX = -moveX
+			if ball.y < paddle.y then
+				moveY = -speed
+			else
+				moveY = speed
+			end
+		end
+	end
+end
 
-    local backgroundImage = gfx.image.new( "Images/background" )
-    assert( backgroundImage )
+local function updateBall()
+	checkBounds()
+	ball:moveBy(moveX, moveY)
+end
 
-    gfx.sprite.setBackgroundDrawingCallback(
-        function( x, y, width, height )
-            gfx.setClipRect( x, y, width, height ) -- let's only draw the part of the screen that's dirty
-            backgroundImage:draw( 0, 0 )
-            gfx.clearClipRect() -- clear so we don't interfere with drawing that comes after this
-        end
-    )
+local function initialize()
+	player = Player(offset * 2, screenH / 2)
+	paddle = Paddle(screenW - offset * 2, 110)
+	ball = Ball(screenW / 2, screenH / 2)
+	score = Score(20, 20, 0, 0)
+
+	-- background
+	local imgBG = GFX.image.new('images/background')
+	assert(imgBG)
+	GFX.sprite.setBackgroundDrawingCallback(
+		function(x, y, w, h)
+			GFX.setClipRect(x, y, w, h)
+			imgBG:draw(0, 0)
+			GFX.clearClipRect()
+		end
+	)
+
+	-- menu background
+	local imgMenu = GFX.image.new('images/menu')
+	assert(imgMenu)
+	PD.setMenuImage(imgMenu, 0)
 
 end
 
--- Now we'll call the function above to configure our game.
--- After this runs (it just runs once), nearly everything will be
--- controlled by the OS calling `playdate.update()` 30 times a second.
-
-myGameSetUp()
-
--- `playdate.update()` is the heart of every Playdate game.
--- This function is called right before every frame is drawn onscreen.
--- Use this function to poll input, run game logic, and move sprites.
+initialize()
 
 function playdate.update()
+	collisions = ball:overlappingSprites()
+	if #collisions > 0 then
+		ricochet()
+	end
 
-    -- Poll the d-pad and move our player accordingly.
-    -- (There are multiple ways to read the d-pad; this is the simplest.)
-    -- Note that it is possible for more than one of these directions
-    -- to be pressed at once, if the user is pressing diagonally.
+	GFX.sprite.update()
+	updateBall()
 
-    if playdate.buttonIsPressed( playdate.kButtonUp ) then
-        playerSprite:moveBy( 0, -2 )
-    end
-    if playdate.buttonIsPressed( playdate.kButtonRight ) then
-        playerSprite:moveBy( 2, 0 )
-    end
-    if playdate.buttonIsPressed( playdate.kButtonDown ) then
-        playerSprite:moveBy( 0, 2 )
-    end
-    if playdate.buttonIsPressed( playdate.kButtonLeft ) then
-        playerSprite:moveBy( -2, 0 )
-    end
-
-    -- Call the functions below in playdate.update() to draw sprites and keep
-    -- timers updated. (We aren't using timers in this example, but in most
-    -- average-complexity games, you will.)
-
-    gfx.sprite.update()
-    playdate.timer.updateTimers()
-
+	GFX.drawTextAligned(score.p1..'* : *'..score.p2, screenW/2, offset, kTextAlignment.center)
 end
