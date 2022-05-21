@@ -10,7 +10,7 @@ function Paddle:init(x, y)
 
 	self.x = x
 	self.y = y
-	self.speed = 4
+	self.speed = r / 2
 	self.r = r
 
 	local img = GFX.image.new(8, r * 2)
