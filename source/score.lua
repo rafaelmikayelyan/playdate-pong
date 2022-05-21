@@ -8,11 +8,14 @@ local p2 = 0
 local turn
 local total
 local winCondition = 10
+local longestGame = 0
+local notSaved = true
 
 function createScore(isNewGame)
 	if isNewGame then
 		p1 = 0
 		p2 = 0
+		notSaved = true
 	end
 
 	scoreSprite = GFX.sprite.new()
@@ -60,6 +63,19 @@ function getScore()
 	return {p1 = p1, p2 = p2}
 end
 
+function getRecord()
+	return longestGame
+end
+
+local function saveRecord()
+	notSaved = false
+	total += 1
+	if total > longestGame then
+		longestGame = total
+	end
+	print(longestGame)
+end
+
 function checkGameOver()
 	local difference = p1 - p2
 	if math.abs(difference) >= winCondition then
@@ -84,6 +100,9 @@ function checkGameOver()
 		GFX.popContext()
 		endSprite:setImage(endImg)
 		
+		if notSaved then
+			saveRecord()
+		end
 		createScore()
 		scoreSprite:moveTo(200, 130)
 	end
