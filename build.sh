@@ -1,5 +1,9 @@
 if [ ! -d build/ ]
 then
-mkdir build/ && echo "build/ created"
+mkdir build/ && echo "-> created build/"
 fi
-pdc source build/pong.pdx && open build/pong.pdx
+
+readline=$(head -n 1 source/pdxinfo)
+name=${readline#*=}
+
+pdc source build/${name}.pdx && open build/${name}.pdx
