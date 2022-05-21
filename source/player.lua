@@ -13,7 +13,7 @@ function Player:init(x,y)
 end
 
 function Player:update()
-	local crankChange, crankAccelerated = PD.getCrankChange()
+	local crankChange, _ = PD.getCrankChange()
 	-- Player.super.update(self)
 	if PD.buttonIsPressed(PD.kButtonUp) then
 		if self.y > TOP then
