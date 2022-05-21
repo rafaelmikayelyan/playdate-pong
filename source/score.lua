@@ -79,9 +79,11 @@ local function saveRecord()
 end
 
 function loadRecord()
-	local record = PD.datastore.read()[1]
-	if record > 0 then
-		longestGame = record
+	if PD.datastore.read() then
+		local record = PD.datastore.read()[1]
+		if record > 0 then
+			longestGame = record
+		end
 	end
 end
 
