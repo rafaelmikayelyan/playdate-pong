@@ -24,6 +24,7 @@ local function initialize()
 	paddle = Paddle(screenDimensions.x - offset * 2, screenDimensions.y / 2)
 	ball = Ball(screenDimensions.x / 2, screenDimensions.y / 2)
 
+	loadRecord()
 	createScore(true)
 
 	-- background
