@@ -15,17 +15,16 @@ local GFX <const> = PD.graphics
 local player = nil
 local bot = nil
 local ball = nil
-local score = nil
 
-local screenW <const> = PD.display.getWidth()
-local screenH <const> = PD.display.getHeight()
+local screenDimensions <const> = {x = PD.display.getWidth(), y = PD.display.getHeight()}
 local offset <const> = 10
 
 local function initialize()
-	player = Player(offset * 2, screenH / 2)
-	paddle = Paddle(screenW - offset * 2, screenH / 2)
-	ball = Ball(screenW / 2, screenH / 2)
-	score = Score(20, 20, 0, 0)
+	player = Player(offset * 2, screenDimensions.y / 2)
+	paddle = Paddle(screenDimensions.x - offset * 2, screenDimensions.y / 2)
+	ball = Ball(screenDimensions.x / 2, screenDimensions.y / 2)
+
+	createScore()
 
 	-- background
 	local imgBG = GFX.image.new('images/background')
@@ -48,6 +47,6 @@ initialize()
 
 function playdate.update()
 	GFX.sprite.update()
-
-	-- GFX.drawTextAligned(score.p1..'* : *'..score.p2, screenW/2, offset, kTextAlignment.center)
+	
+	checkGameOver()
 end
