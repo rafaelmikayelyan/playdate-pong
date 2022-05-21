@@ -73,7 +73,16 @@ local function saveRecord()
 	if total > longestGame then
 		longestGame = total
 	end
-	print(longestGame)
+	-- print(longestGame)
+	PD.datastore.write({longestGame})
+
+end
+
+function loadRecord()
+	local record = PD.datastore.read()[1]
+	if record > 0 then
+		longestGame = record
+	end
 end
 
 function checkGameOver()
