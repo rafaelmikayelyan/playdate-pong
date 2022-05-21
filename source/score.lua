@@ -1,8 +1,6 @@
 local PD <const> = playdate
 local GFX <const> = PD.graphics
 
--- class('Score').extends()
-
 local scoreSprite
 
 local p1 = 0
@@ -11,7 +9,12 @@ local turn
 local total
 local winCondition = 10
 
-function createScore()
+function createScore(isNewGame)
+	if isNewGame then
+		p1 = 0
+		p2 = 0
+	end
+
 	scoreSprite = GFX.sprite.new()
 	updateScore()
 	scoreSprite:setCenter(0.5, 0.5)
@@ -70,8 +73,6 @@ function checkGameOver()
 			endText = 'LOST!'
 		end
 
-		print(endText)
-
 		local endSprite = GFX.sprite.new()
 		endSprite:setCenter(0.5, 0.5)
 		endSprite:moveTo(200, 110)
@@ -82,7 +83,7 @@ function checkGameOver()
 		GFX.drawText(endText, 0, 0)
 		GFX.popContext()
 		endSprite:setImage(endImg)
-
+		
 		createScore()
 		scoreSprite:moveTo(200, 130)
 	end
