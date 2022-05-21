@@ -24,7 +24,7 @@ local function initialize()
 	paddle = Paddle(screenDimensions.x - offset * 2, screenDimensions.y / 2)
 	ball = Ball(screenDimensions.x / 2, screenDimensions.y / 2)
 
-	createScore()
+	createScore(true)
 
 	-- background
 	local imgBG = GFX.image.new('images/background')
@@ -45,49 +45,23 @@ end
 
 initialize()
 
+local function restart()
+	GFX.sprite.removeAll()
+
+	initialize()
+end
+
 function playdate.update()
 	GFX.sprite.update()
 	
 	checkGameOver()
 end
 
---First determine which option should already be selected when the menu opens ("storedValue" is assumed to be some variable--which need not be an integer--that exists in your game already):
-
--- local preSelectedMenuOption
--- if storedValue == 1 then --Whatever value was set previously by your game (maybe an initial default, maybe a prior hoice saved in playdate.datastore)
--- 	preSelectedMenuOption = "option A"
--- elseif storedValue == 2 then
--- 	preSelectedMenuOption = "option B"
--- else
--- 	preSelectedMenuOption = "option C"
--- end
-
--- --Then create the menu item (its title will be forced to lowercase by the system, but capitalization of its options is in your control):
-
--- local menu = playdate.getSystemMenu()
-
--- local menuItem, error = menu:addOptionsMenuItem("title", {"option A", "option B", "option C"}, preSelectedMenuOption, function(value)
--- 	setstoredValue(value)
--- end)
-
--- --This function runs when the system menu closes, if the user changed the option:
-
--- function setstoredValue(value)
--- 	if value == "option A" then
--- 		storedValue = 1
--- 	elseif value == "option B" then
--- 		storedValue = 2
--- 	else
--- 		storedValue = 3
--- 	end
-	
--- 	--Take actions here to make use of the new "storedValue" (and save it to playdate.datastore for future sessions if desired)
--- end
-
+-- menu
 local menu = playdate.getSystemMenu()
 
 local menuItem, error = menu:addMenuItem("restart", function()
-    print("restart")
+    restart()
 end)
 
 local checkmarkMenuItem, error = menu:addCheckmarkMenuItem("true-angle", true, function(value)
