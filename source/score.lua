@@ -1,30 +1,89 @@
 local PD <const> = playdate
 local GFX <const> = PD.graphics
 
-class('Score').extends()
+-- class('Score').extends()
+
+local scoreSprite
 
 local p1 = 0
 local p2 = 0
+local turn
+local total
+local winCondition = 10
 
-function Score:init(x, y, p1, p2)
-	self.p1 = p1
-	self.p2 = p2
+function createScore()
+	scoreSprite = GFX.sprite.new()
+	updateScore()
+	scoreSprite:setCenter(0.5, 0.5)
+	scoreSprite:moveTo(200, 20)
+	scoreSprite:add()
 end
 
-function Score:add(p)
+function updateScore()
+	local scoreText = p1..' : '..p2
+	local textWidth, textHeight = GFX.getTextSize(scoreText)
+	local scoreImg = GFX.image.new(textWidth, textHeight)
+	GFX.pushContext(scoreImg)
+	GFX.drawText(scoreText, 0, 0)
+	GFX.popContext()
+	scoreSprite:setImage(scoreImg)
+end
+
+function addScore(p)
 	if p > 0 then
-		self.p1 += 1
+		p1 += 1
 	else
-		self.p2 += 1
+		p2 += 1
 	end
-	self:update()
-	print(self.p1..' : '..self.p2)
+	updateScore()
 end
 
-function Score:update()
-	print('update')
+function resetScore()
+	p1 = 0
+	p2 = 0
+	updateScore()
 end
 
-function Score:win()
-	print('win')
+function getTurn()
+	total = p1 + p2
+	turn = total % 2
+	if turn == 0 then
+		turn = -1
+	end
+	return {turn = turn, total = total}
+end
+
+function getScore()
+	return {p1 = p1, p2 = p2}
+end
+
+function checkGameOver()
+	local difference = p1 - p2
+	if math.abs(difference) >= winCondition then
+		local endText
+
+		GFX.sprite.removeAll()
+		
+		if difference > 0 then
+			endText = 'WON!'
+		else
+			endText = 'LOST!'
+		end
+
+		print(endText)
+
+		local endSprite = GFX.sprite.new()
+		endSprite:setCenter(0.5, 0.5)
+		endSprite:moveTo(200, 110)
+		endSprite:add()
+		local textWidth, textHeight = GFX.getTextSize(endText)
+		local endImg = GFX.image.new(textWidth, textHeight)
+		GFX.pushContext(endImg)
+		GFX.drawText(endText, 0, 0)
+		GFX.popContext()
+		endSprite:setImage(endImg)
+
+		createScore()
+		scoreSprite:moveTo(200, 130)
+	end
 end
