@@ -5,9 +5,11 @@ class('Ball').extends(GFX.sprite)
 
 local r <const> = 4
 local screenCenter <const> = {x = PD.display.getWidth() / 2, y = PD.display.getHeight() / 2}
-local speed <const> = 8
 
 local direction
+
+local speed = 8
+local multiAngle = true
 
 function Ball:init(x, y)
 	-- not necessary
@@ -39,7 +41,6 @@ end
 
 local function ricochet(self, paddle)
 	direction = self.vector.x / math.abs(self.vector.x)
-	local multiAngle = true
 
 	-- calculate the angle
 	if multiAngle then
@@ -58,7 +59,7 @@ local function ricochet(self, paddle)
 		self.vector.x = speed * sinB * -direction
 		self.vector.y = speed * sinA * direction
 
-		print('Vxy: '..self.vector.x..' '..self.vector.y..'\t\tangle: '..angle..'\tspeed: '..math.sqrt(self.vector.x^2 + self.vector.y^2)..'\tsinB cosB: '..sinB..' '..cosB)
+		-- print('Vxy: '..self.vector.x..' '..self.vector.y..'\t\tangle: '..angle..'\tspeed: '..math.sqrt(self.vector.x^2 + self.vector.y^2)..'\tsinB cosB: '..sinB..' '..cosB)
 
 	-- simple 2-angle
 	else
@@ -67,14 +68,14 @@ local function ricochet(self, paddle)
 			self.vector.y = 0
 		else
 			if self.y < paddle.y - paddle.r or self.y > paddle.y + paddle.r then
-				self.vector.x = speed * direction / 2
+				self.vector.x = speed * direction
 			else
-				self.vector.x = speed * -direction / 2
+				self.vector.x = speed * -direction
 			end
 			if self.y < paddle.y then
-				self.vector.y = -speed
+				self.vector.y = -speed / 2
 			else
-				self.vector.y = speed
+				self.vector.y = speed / 2
 			end
 		end
 	end
@@ -99,4 +100,12 @@ end
 
 function Ball:collisionResponse()
     return 'bounce'
+end
+
+function setMutiAngle(bool)
+	multiAngle = bool
+end
+
+function setSpeed(int)
+	speed = int
 end
