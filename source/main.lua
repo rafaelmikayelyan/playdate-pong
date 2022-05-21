@@ -37,9 +37,16 @@ local function initialize()
 		end
 	)
 
-	-- menu background
+	-- set menu background
 	local imgMenu = GFX.image.new('images/menu')
 	assert(imgMenu)
+
+	-- add menu scoreboard
+	if getRecord() then
+		GFX.pushContext(imgMenu)
+		GFX.drawText('Last longest game: '..getRecord(), 10, 215)
+		GFX.popContext()
+	end
 	PD.setMenuImage(imgMenu, 0)
 end
 
