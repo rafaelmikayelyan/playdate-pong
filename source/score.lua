@@ -26,7 +26,7 @@ function createScore(isNewGame)
 end
 
 function updateScore()
-	local scoreText = p1..' : '..p2
+	local scoreText = '*'..p1..' : '..p2..'*'
 	local textWidth, textHeight = GFX.getTextSize(scoreText)
 	local scoreImg = GFX.image.new(textWidth, textHeight)
 	GFX.pushContext(scoreImg)
@@ -73,9 +73,7 @@ local function saveRecord()
 	if total > longestGame then
 		longestGame = total
 	end
-	-- print(longestGame)
 	PD.datastore.write({longestGame})
-
 end
 
 function loadRecord()
@@ -95,9 +93,13 @@ function checkGameOver()
 		GFX.sprite.removeAll()
 		
 		if difference > 0 then
-			endText = 'WON!'
+			endText = '*WON!*'
 		else
-			endText = 'LOST!'
+			endText = '*LOST!*'
+		end
+
+		if notSaved then
+			saveRecord()
 		end
 
 		local endSprite = GFX.sprite.new()
@@ -111,9 +113,6 @@ function checkGameOver()
 		GFX.popContext()
 		endSprite:setImage(endImg)
 		
-		if notSaved then
-			saveRecord()
-		end
 		createScore()
 		scoreSprite:moveTo(200, 130)
 	end
