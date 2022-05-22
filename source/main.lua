@@ -12,6 +12,8 @@ import 'score'
 local PD <const> = playdate
 local GFX <const> = PD.graphics
 
+local version <const> =  'v: '..playdate.metadata.version
+
 local player = nil
 local bot = nil
 local ball = nil
@@ -19,15 +21,7 @@ local ball = nil
 local screenDimensions <const> = {x = PD.display.getWidth(), y = PD.display.getHeight()}
 local offset <const> = 10
 
-local function initialize()
-	player = Player(offset * 2, screenDimensions.y / 2)
-	paddle = Paddle(screenDimensions.x - offset * 2, screenDimensions.y / 2)
-	ball = Ball(screenDimensions.x / 2, screenDimensions.y / 2)
-
-	loadRecord()
-	createScore(true)
-
-	-- background
+local function setBackground()
 	local imgBG = GFX.image.new('images/background')
 	assert(imgBG)
 	GFX.sprite.setBackgroundDrawingCallback(
@@ -37,7 +31,9 @@ local function initialize()
 			GFX.clearClipRect()
 		end
 	)
+end
 
+local function setMenu()
 	-- set menu background
 	local imgMenu = GFX.image.new('images/menu')
 	assert(imgMenu)
@@ -45,10 +41,23 @@ local function initialize()
 	-- add menu scoreboard
 	if getRecord() then
 		GFX.pushContext(imgMenu)
-		GFX.drawText('Last longest game: '..getRecord(), 10, 215)
+		GFX.drawText('*Longest game: '..getRecord()..'*', 10, 215)
+		GFX.drawText(version, 155, 215)
 		GFX.popContext()
 	end
 	PD.setMenuImage(imgMenu, 0)
+end
+
+local function initialize()
+	player = Player(offset * 2, screenDimensions.y / 2)
+	paddle = Paddle(screenDimensions.x - offset * 2, screenDimensions.y / 2)
+	ball = Ball(screenDimensions.x / 2, screenDimensions.y / 2)
+
+	loadRecord()
+	createScore(true)
+
+	setBackground()
+	setMenu()
 end
 
 initialize()
@@ -76,7 +85,7 @@ local checkmarkMenuItem, error = menu:addCheckmarkMenuItem("true-angle", true, f
 	setMutiAngle(value)
 end)
 
-local checkmarkMenuItem, error = menu:addCheckmarkMenuItem("speedball", false, function(value)
+local checkmarkMenuItem, error = menu:addCheckmarkMenuItem("fastball", false, function(value)
 	if value then
 		setSpeed(16)
 	else
