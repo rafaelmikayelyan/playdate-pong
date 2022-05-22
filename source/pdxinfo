@@ -1,6 +1,6 @@
 name=bootleg-pong
-author=RM
-description=Good old Pong, but bootleg
+author=RafaelM
+description=Pong, but bootleg
 bundleID=com.rm.bootlegpong
-version=0.4
+version=1.0
 imagePath=launcher/
