@@ -2,4 +2,3 @@
 
 ## ToDo
 - Add bot
-- Add sounds
