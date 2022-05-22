@@ -1,6 +1,8 @@
 local PD <const> = playdate
 local GFX <const> = PD.graphics
 
+import 'sound'
+
 class('Ball').extends(GFX.sprite)
 
 local r <const> = 4
@@ -41,6 +43,7 @@ end
 
 local function ricochet(self, paddle)
 	direction = self.vector.x / math.abs(self.vector.x)
+	getCollideSound(1)
 
 	-- calculate the angle
 	if multiAngle then
@@ -91,9 +94,11 @@ function Ball:update()
 			end
 		end
 	elseif actualX < 0 or actualX > 400 then
+		getCollideSound(-1)
 		resetBall(self)
 		addScore(actualX)	
 	elseif actualY < 0 + self.r or actualY > 240 - self.r then
+		getCollideSound(0)
 		self.vector.y = -self.vector.y
 	end
 end
