@@ -4,7 +4,7 @@ import 'CoreLibs/object'
 import 'CoreLibs/sprites'
 -- import 'CoreLibs/timer'
 
-import 'paddle'
+import 'bot'
 import 'player'
 import 'ball'
 import 'score'
@@ -12,7 +12,7 @@ import 'score'
 local PD <const> = playdate
 local GFX <const> = PD.graphics
 
-local version <const> =  'v: '..playdate.metadata.version
+local version <const> =  'v: '..PD.metadata.version
 
 local player = nil
 local bot = nil
@@ -50,7 +50,7 @@ end
 
 local function initialize()
 	player = Player(offset * 2, screenDimensions.y / 2)
-	paddle = Paddle(screenDimensions.x - offset * 2, screenDimensions.y / 2)
+	bot = Bot(screenDimensions.x - offset * 2, screenDimensions.y / 2)
 	ball = Ball(screenDimensions.x / 2, screenDimensions.y / 2)
 
 	loadRecord()
@@ -68,14 +68,21 @@ local function restart()
 	initialize()
 end
 
-function playdate.update()
+function PD.update()
 	GFX.sprite.update()
+
+	if PD.buttonIsPressed(PD.kButtonA) then
+		print('a')
+	end
+	if PD.buttonIsPressed(PD.kButtonB) then
+		print('b')
+	end
 	
 	checkGameOver()
 end
 
 -- menu
-local menu = playdate.getSystemMenu()
+local menu = PD.getSystemMenu()
 
 local menuItem, error = menu:addMenuItem("restart", function()
     restart()
