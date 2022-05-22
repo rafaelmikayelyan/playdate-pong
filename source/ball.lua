@@ -13,6 +13,8 @@ local direction
 local speed = 8
 local multiAngle = true
 
+local ballStatus = {0, 0, -1}
+
 function Ball:init(x, y)
 	-- not necessary
 	Ball.super.init(self)
@@ -39,6 +41,7 @@ local function resetBall(self)
 	self:moveTo(screenCenter.x, screenCenter.y)
 	self.vector.x = speed * getTurn().turn
 	self.vector.y = 0
+	ballStatus = {0, 0, -1}
 end
 
 local function ricochet(self, paddle)
@@ -60,9 +63,7 @@ local function ricochet(self, paddle)
 		cosB = math.cos(math.rad(angle))
 		sinA = math.sin(math.rad(90-angle))
 		self.vector.x = speed * sinB * -direction
-		self.vector.y = speed * sinA * direction
-
-		-- print('Vxy: '..self.vector.x..' '..self.vector.y..'\t\tangle: '..angle..'\tspeed: '..math.sqrt(self.vector.x^2 + self.vector.y^2)..'\tsinB cosB: '..sinB..' '..cosB)
+		self.vector.y = speed * sinA * direction * self.vector.x / math.abs(self.vector.x)
 
 	-- simple 2-angle
 	else
@@ -86,10 +87,12 @@ end
 
 function Ball:update()
 	local actualX, actualY, collisions, length = self:moveWithCollisions(self.x + self.vector.x, self.y + self.vector.y)
+	local correction = 0
+
 	if length > 0 then
 		for index, collision in pairs(collisions) do
 			local collidedObject = collision['other']
-			if collidedObject:isa(Player) or collidedObject:isa(Paddle) then
+			if collidedObject:isa(Player) or collidedObject:isa(Bot) then
 				ricochet(self, collidedObject)
 			end
 		end
@@ -101,6 +104,8 @@ function Ball:update()
 		getCollideSound(0)
 		self.vector.y = -self.vector.y
 	end
+
+	ballStatus = {self.x, self.y, direction}
 end
 
 function Ball:collisionResponse()
@@ -113,4 +118,8 @@ end
 
 function setSpeed(int)
 	speed = int
+end
+
+function getBallStatus()
+	return ballStatus
 end
