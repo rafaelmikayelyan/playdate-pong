@@ -4,3 +4,4 @@
 
 ## ToDo
 - improve bot
+- add main menu
