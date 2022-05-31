@@ -1,4 +1,4 @@
-# Pong clone for Playdate
+# (bootleg) Pong for Playdate
 
 (Getting familiar with Lua and Playdate SDK)
 
