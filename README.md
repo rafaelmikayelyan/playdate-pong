@@ -2,6 +2,8 @@
 
 (Getting familiar with Lua and Playdate SDK)
 
+![pong gif](ping-pong.gif)
+
 ## ToDo
 - improve bot
 - add main menu
