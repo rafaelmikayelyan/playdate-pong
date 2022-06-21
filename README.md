@@ -1,12 +1,12 @@
 # (bootleg) Pong for Playdate
 
-![pong title png](ping-pong-title-screen.png)
+![pong title png](pong-title-screen.png)
 
 ![pong scoring gif](pong-scoring.gif)
 
 ![pong menu gif](pong-menu.png)
 
-![ping pong gif](ping-pong.gif)
+![pong loop gif](pong-loop.gif)
 
 ## ToDo
 - improve bot
