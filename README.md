@@ -9,6 +9,8 @@ Features:
 - fastball: doubles the speed
 - true-angle: calculates angle (vs regular 3 angles)
 
+[Download this game](https://rafaelmikayelyan.itch.io/bootleg-pong) for your Playdate or [Playdate Simulator](https://play.date).
+
 ![pong scoring gif](pong-scoring.gif)
 
 ![pong menu gif](pong-menu.png)
