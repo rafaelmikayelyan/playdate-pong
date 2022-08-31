@@ -19,6 +19,5 @@ Features:
 
 
 ## ToDo
-- change speedball
 - improve bot
 - add menu animation
