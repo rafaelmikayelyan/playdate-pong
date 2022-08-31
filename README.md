@@ -19,7 +19,7 @@ Features:
 
 
 ## ToDo
-- add gradual ball speed increase
+- add gradual ball acceleration
 - change speedball
 - improve bot
 - add menu animation
