@@ -9,7 +9,8 @@ Features:
 - fastball: activates max speed
 - true-angle: calculates angle (vs regular 3 angles)
 
-[Download this game](https://rafaelmikayelyan.itch.io/bootleg-pong) on your handheld or [Playdate Simulator](https://play.date).
+[Download this game](https://rafaelmikayelyan.itch.io/bootleg-pong) on your
+[handheld](https://help.play.date/games/sideloading/) or [Playdate Simulator](https://play.date/dev/).
 
 ![pong scoring gif](support/pong-scoring.gif)
 
