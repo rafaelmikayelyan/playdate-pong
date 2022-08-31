@@ -20,4 +20,7 @@ Features:
 
 ## ToDo
 - improve bot
-- add menu animation
+	- fix jitter
+	- add randomness
+	- add predictions
+- add launcher card animation
