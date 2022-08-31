@@ -6,7 +6,7 @@ Features:
 - player moves with arrows/crank
 - bot: defensive (he is trying to survive)
 - records longest game
-- fastball: doubles the speed
+- fastball: activate max speed
 - true-angle: calculates angle (vs regular 3 angles)
 
 [Download this game](https://rafaelmikayelyan.itch.io/bootleg-pong) on your handheld or [Playdate Simulator](https://play.date).
