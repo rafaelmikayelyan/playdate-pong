@@ -2,5 +2,5 @@ name=bootleg-pong
 author=RafaelM
 description=Pong, but bootleg
 bundleID=com.rm.bootlegpong
-version=1.0
+version=1.0.1
 imagePath=launcher/
