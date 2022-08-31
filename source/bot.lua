@@ -10,7 +10,7 @@ local BOTTOM <const> = 228
 
 local ball
 
-local reactionDistance <const> = PD.display.getWidth() - 100
+local reactionDistance <const> = PD.display.getWidth() - 200
 
 function Bot:init(x,y)
 	Bot.super.init(self, x, y)
