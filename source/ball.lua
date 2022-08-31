@@ -11,6 +11,7 @@ local screenCenter <const> = {x = PD.display.getWidth() / 2, y = PD.display.getH
 local direction
 
 local speed = 8
+local acceleration <const> = 1
 local multiAngle = true
 
 local ballStatus = {0, 0, -1}
@@ -38,6 +39,7 @@ function Ball:init(x, y)
 end
 
 local function resetBall(self)
+	speed = 8
 	self:moveTo(screenCenter.x, screenCenter.y)
 	self.vector.x = speed * getTurn().turn
 	self.vector.y = 0
@@ -94,6 +96,9 @@ function Ball:update()
 			local collidedObject = collision['other']
 			if collidedObject:isa(Player) or collidedObject:isa(Bot) then
 				ricochet(self, collidedObject)
+				if speed < 20 then
+					speed += acceleration
+				end
 			end
 		end
 	elseif actualX < 0 or actualX > 400 then
