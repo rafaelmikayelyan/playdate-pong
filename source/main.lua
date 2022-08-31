@@ -93,9 +93,5 @@ local checkmarkMenuItem, error = menu:addCheckmarkMenuItem("true-angle", true, f
 end)
 
 local checkmarkMenuItem, error = menu:addCheckmarkMenuItem("fastball", false, function(value)
-	if value then
-		setSpeed(16)
-	else
-		setSpeed(8)
-	end
+	setSpeedball(value)
 end)
