@@ -20,6 +20,10 @@ Features:
 
 
 ## ToDo
+- add main menu:
+	- add classic mode (11 points win)
+- change game over screen
+	- add return to main menu action
 - improve bot
 	- fix jitter
 	- add randomness
