@@ -70,14 +70,6 @@ end
 
 function PD.update()
 	GFX.sprite.update()
-
-	if PD.buttonIsPressed(PD.kButtonA) then
-		print('a')
-	end
-	if PD.buttonIsPressed(PD.kButtonB) then
-		print('b')
-	end
-	
 	checkGameOver()
 end
 
